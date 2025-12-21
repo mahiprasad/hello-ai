@@ -195,6 +195,50 @@ ollama.model=gpt-oss:120b-cloud
 
 ---
 
+## GitHub Actions / CI/CD
+
+This project includes GitHub Actions workflows for automated builds and releases.
+
+### Continuous Integration (CI)
+
+The CI workflow runs on every push and pull request:
+- Builds the project with Maven
+- Runs tests
+- Creates build artifacts
+
+### Releases
+
+To create a release:
+
+**Option 1: Using Git Tags (Recommended)**
+```bash
+git tag -a v1.0.0 -m "Release version 1.0.0"
+git push origin v1.0.0
+```
+
+**Option 2: Using GitHub Actions UI**
+1. Go to Actions tab in GitHub
+2. Select "Build and Release" workflow
+3. Click "Run workflow"
+4. Enter version (e.g., `v1.0.0`)
+5. Click "Run workflow"
+
+The workflow will:
+- Build the project
+- Run tests
+- Create a JAR file
+- Create a GitHub release with artifacts
+
+### Release Artifacts
+
+Each release includes:
+- `hello-ai.jar` - Executable JAR file
+- `README.md` - Documentation
+- `pom.xml` - Maven configuration
+- `hello-ai.tar.gz` - Complete package
+
+---
+
 ## License
 
 This project is open source and available for personal and commercial use.
