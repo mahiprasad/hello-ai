@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Debug Spring Boot App",
+      "request": "launch",
+      "mainClass": "com.genai.HelloAiApplication",
+      "projectName": "hello-ai",
+      "args": "",
+      "vmArgs": ""
+    },
+    {
+      "type": "java",
+      "name": "Attach to Debug Port (if running with debug.sh)",
+      "request": "attach",
+      "hostName": "localhost",
+      "port": 5005
+    }
+  ]
+}
+

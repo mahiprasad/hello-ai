@@ -1,0 +1,28 @@
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/*
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Java/Spring Boot
+target/
+*.class
+*.jar
+*.war
+*.ear
+.mvn/
+mvnw
+mvnw.cmd
+
