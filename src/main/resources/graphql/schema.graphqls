@@ -1,0 +1,14 @@
+type Query {
+    health: String!
+    chat(prompt: String!, model: String): ChatResponse!
+}
+
+type Mutation {
+    chat(prompt: String!, model: String): ChatResponse!
+}
+
+type ChatResponse {
+    response: String!
+    model: String!
+}
+

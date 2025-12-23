@@ -27,31 +27,23 @@ public class OpenAIService {
     private String openaiModel;
     
     public OpenAIService(RestTemplate restTemplate, ObjectMapper objectMapper) {
-        logger.debug("OpenAIService initialized");
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
     }
     
     public String getResponse(String prompt) {
-        logger.info("OpenAIService.getResponse() called");
-        logger.debug("Prompt: {}", prompt);
-        logger.debug("OpenAI API URL: {}", openaiApiUrl);
-        logger.debug("OpenAI Model: {}", openaiModel);
-        logger.debug("API Key present: {}", openaiApiKey != null && !openaiApiKey.isEmpty());
-        
         try {
             String requestBody = String.format(
                 "{\"model\":\"%s\",\"messages\":[{\"role\":\"user\",\"content\":\"%s\"}]}",
                 openaiModel, escapeJson(prompt)
             );
-            logger.debug("Request body: {}", requestBody);
             
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(openaiApiKey);
             HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
             
-            logger.info("Calling OpenAI API at: {}", openaiApiUrl);
+            logger.info("Calling OpenAI API with model: {}", openaiModel);
             ResponseEntity<String> response = restTemplate.exchange(
                 openaiApiUrl,
                 HttpMethod.POST,
@@ -59,16 +51,8 @@ public class OpenAIService {
                 String.class
             );
             
-            logger.debug("OpenAI API response status: {}", response.getStatusCode());
-            logger.debug("OpenAI API response body (first 200 chars): {}", 
-                response.getBody() != null ? response.getBody().substring(0, Math.min(200, response.getBody().length())) : "null");
-            
             JsonNode jsonNode = objectMapper.readTree(response.getBody());
-            String extractedResponse = jsonNode.get("choices").get(0).get("message").get("content").asText();
-            logger.debug("Extracted response (first 100 chars): {}", 
-                extractedResponse != null ? extractedResponse.substring(0, Math.min(100, extractedResponse.length())) : "null");
-            
-            return extractedResponse;
+            return jsonNode.get("choices").get(0).get("message").get("content").asText();
             
         } catch (Exception e) {
             logger.error("Error calling OpenAI API", e);

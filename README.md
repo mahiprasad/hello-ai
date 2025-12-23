@@ -5,6 +5,7 @@ A Spring Boot application that provides REST API and shell scripts for interacti
 ## Features
 
 - REST API for AI chat requests
+- GraphQL API for AI chat requests
 - Shell scripts for command-line usage
 - Support for both Ollama and OpenAI models
 - Environment variable configuration for API keys
@@ -124,6 +125,80 @@ curl -X POST http://localhost:8081/api/chat \
    - URL: `http://localhost:8081/api/chat/health`
    - Expected Response: `"Hello, AI! Service is running."`
 
+---
+
+### Method 3: Using GraphQL API
+
+#### GraphQL Endpoint
+
+The GraphQL endpoint is available at: `http://localhost:8081/graphql`
+
+#### Test with curl
+
+**1. Health Check Query:**
+```bash
+curl --location 'http://localhost:8081/graphql' \
+--header 'Content-Type: application/json' \
+--data '{"query":"{ health }","variables":{}}'
+```
+
+**2. Chat Query (Ollama):**
+```bash
+curl --location 'http://localhost:8081/graphql' \
+--header 'Content-Type: application/json' \
+--data '{"query":"query {\n  chat(prompt: \"Hello!\", model: \"ollama\") {\n    response\n    model\n  }\n}","variables":{}}'
+```
+
+**3. Chat Mutation:**
+```bash
+curl --location 'http://localhost:8081/graphql' \
+--header 'Content-Type: application/json' \
+--data '{"query":"mutation {\n    chat(prompt: \"Explain GraphQL\", model: \"ollama\") {\n       response\n       model\n    }\n}","variables":{}}'
+```
+
+**4. Chat Query (OpenAI):**
+```bash
+curl --location 'http://localhost:8081/graphql' \
+--header 'Content-Type: application/json' \
+--data '{"query":"query {\n  chat(prompt: \"What is Java?\", model: \"openai\") {\n    response\n    model\n  }\n}","variables":{}}'
+```
+
+**5. Query with Variables:**
+```bash
+curl --location 'http://localhost:8081/graphql' \
+--header 'Content-Type: application/json' \
+--data '{"query":"query ChatQuery($prompt: String!, $model: String) {\n    chat(prompt: $prompt, model: $model) {\n        response\n        model\n    }\n}","variables":{"prompt":"Hello, how are you?","model":"ollama"}}'
+```
+
+**6. Mutation with Variables:**
+```bash
+curl --location 'http://localhost:8081/graphql' \
+--header 'Content-Type: application/json' \
+--data '{"query":"mutation ChatQuery($prompt: String!, $model: String) {\n    chat(prompt: $prompt, model: $model) {\n        response\n        model\n    }\n}","variables":{"prompt":"Hello, how are you?","model":"ollama"}}'
+```
+
+#### Parse Response (Extract Only the Text)
+
+**Using jq (extract response text only):**
+```bash
+curl -X POST http://localhost:8081/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query": "query { chat(prompt: \"Hello!\", model: \"ollama\") { response model } }"}' \
+  | jq -r '.data.chat.response'
+```
+
+**Response Structure:**
+```json
+{
+  "data": {
+    "chat": {
+      "response": "The AI-generated response text here...",
+      "model": "Ollama"
+    }
+  }
+}
+```
+
 ## Configuration
 
 Edit `src/main/resources/application.properties` to customize:
@@ -140,6 +215,11 @@ openai.model=gpt-4o-mini
 # Ollama Configuration
 ollama.api.url=http://localhost:11434/api/generate
 ollama.model=gpt-oss:120b-cloud
+
+# GraphQL Configuration
+spring.graphql.path=/graphql
+spring.graphql.graphiql.enabled=true
+spring.graphql.graphiql.path=/graphiql
 ```
 
 ---
