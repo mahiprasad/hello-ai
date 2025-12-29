@@ -2,6 +2,31 @@
 
 A Spring Boot application that provides REST API and shell scripts for interacting with both Ollama and OpenAI AI models.
 
+┌─────────────────────────────────┐
+│ HelloAiApplication.java         │ ← 1. Application starts
+└────────────┬────────────────────┘
+             │
+             ├─→ RestTemplateConfig.java ← 2. Configure HTTP client
+             │
+             ├─→ application.properties ← 2. Load configuration
+             │
+             ├─→ ┌─────────────────────────────┐
+             │   │ REST API Path               │
+             │   ├─→ ChatController.java       │ ← 3a. REST endpoint
+             │   ├─→ ChatRequest.java         │ ← 3a. Request DTO
+             │   └─→ ChatResponse.java        │ ← 3a. Response DTO
+             │
+             ├─→ ┌─────────────────────────────┐
+             │   │ GraphQL API Path            │
+             │   ├─→ schema.graphqls           │ ← 3b. GraphQL schema
+             │   ├─→ ChatResolver.java         │ ← 3b. GraphQL resolver
+             │   └─→ ChatResponse.java         │ ← 3b. Response DTO
+             │
+             └─→ ┌─────────────────────────────┐
+                 │ Service Layer               │
+                 ├─→ OllamaService.java        │ ← 4. Ollama AI logic
+                 └─→ OpenAIService.java        │ ← 4. OpenAI logic
+
 ## Features
 
 - REST API for AI chat requests
