@@ -1,7 +1,7 @@
 # Hello AI - Spring Boot Application
 
 A Spring Boot application that provides REST API and shell scripts for interacting with both Ollama and OpenAI AI models.
-
+```
 ┌─────────────────────────────────┐
 │ HelloAiApplication.java         │ ← 1. Application starts
 └────────────┬────────────────────┘
@@ -27,6 +27,7 @@ A Spring Boot application that provides REST API and shell scripts for interacti
                  ├─→ OllamaService.java        │ ← 4. Ollama AI logic
                  └─→ OpenAIService.java        │ ← 4. OpenAI logic
 
+```
 ## Features
 
 - REST API for AI chat requests
